@@ -3,6 +3,7 @@ message: "If you use this reference implementation, please cite it."
 title: "Evidence-Traceable RAG"
 abstract: "A synthetic reference implementation of machine-verifiable evidence provenance for retrieval-augmented generation."
 version: "0.1.0"
+date-released: 2026-09-21
 authors:
   - family-names: Zhu
     given-names: Qingchuan

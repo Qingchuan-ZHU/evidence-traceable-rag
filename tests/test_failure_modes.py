@@ -59,6 +59,63 @@ def test_case_a_all_layers_pass() -> None:
     assert metrics["end_to_end_traceability"] is True
 
 
+def test_evidence_availability_is_false_when_package_truncates_retrieval_hit() -> None:
+    required = _unit("u-required", GOLD)
+    distractor = _unit("u-distractor", "The fictional color is amber.")
+    retrieved = [
+        RetrievedUnit(unit=distractor, score=2.0, rank=1),
+        RetrievedUnit(unit=required, score=1.0, rank=2),
+    ]
+    metrics = _metrics(
+        retrieved,
+        GenerationOutput(answer=GOLD, citation_ids=("E1",)),
+        build_evidence_package(retrieved, max_items=1),
+        relevant=[required.unit_id],
+        supporting=[required.unit_id],
+    )
+
+    assert metrics["retrieval_hit_at_k"] == 1.0
+    assert metrics["evidence_available"] is False
+
+
+def test_evidence_availability_requires_all_required_units() -> None:
+    first = _unit("u-first", GOLD)
+    second = _unit("u-second", "The fictional color is amber.")
+    retrieved = [
+        RetrievedUnit(unit=first, score=2.0, rank=1),
+        RetrievedUnit(unit=second, score=1.0, rank=2),
+    ]
+    metrics = _metrics(
+        retrieved,
+        GenerationOutput(answer=GOLD, citation_ids=("E1",)),
+        build_evidence_package(retrieved, max_items=1),
+        relevant=[first.unit_id, second.unit_id],
+        supporting=[first.unit_id],
+    )
+
+    assert metrics["retrieval_hit_at_k"] == 1.0
+    assert metrics["evidence_available"] is False
+
+
+def test_evidence_availability_is_true_when_all_required_units_are_packaged() -> None:
+    first = _unit("u-first", GOLD)
+    second = _unit("u-second", "The fictional color is amber.")
+    retrieved = [
+        RetrievedUnit(unit=first, score=2.0, rank=1),
+        RetrievedUnit(unit=second, score=1.0, rank=2),
+    ]
+    metrics = _metrics(
+        retrieved,
+        GenerationOutput(answer=GOLD, citation_ids=("E1",)),
+        build_evidence_package(retrieved),
+        relevant=[first.unit_id, second.unit_id],
+        supporting=[first.unit_id],
+    )
+
+    assert metrics["retrieval_hit_at_k"] == 1.0
+    assert metrics["evidence_available"] is True
+
+
 def test_case_b_correct_answer_invalid_citation() -> None:
     unit = _unit("u-correct", GOLD)
     retrieved = [RetrievedUnit(unit=unit, score=1.0, rank=1)]

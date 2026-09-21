@@ -91,7 +91,7 @@ def supporting_units_cited(
     evidence_package: EvidencePackage,
     supporting_unit_ids: Iterable[str],
 ) -> bool:
-    """Check deterministic coverage of gold synthetic supporting units."""
+    """Check deterministic supporting-unit coverage, not semantic support."""
 
     expected = set(supporting_unit_ids)
     if not expected:
@@ -142,11 +142,17 @@ def evaluate_traceability(
     k: int = 5,
     answer_evaluator: AnswerEvaluator | None = None,
 ) -> dict[str, float | bool]:
-    """Return three core layers and their auditable supporting indicators."""
+    """Return retrieval, package availability, correctness, and provenance indicators."""
 
     relevant_ids = tuple(relevant_unit_ids)
     supporting_ids = tuple(supporting_unit_ids)
     retrieval_hit = retrieval_hit_at_k(retrieved, relevant_ids, k=k)
+    required_ids = set(relevant_ids)
+    package_unit_ids = {
+        item.unit.unit_id for item in evidence_package.items.values()
+    }
+    # Retrieval hit and final-package availability intentionally describe different stages.
+    evidence_available = bool(required_ids) and required_ids.issubset(package_unit_ids)
     structured_valid = structured_output_valid(answer_output)
     provenance_valid = provenance_integrity(answer_output, evidence_package)
     supporting_covered = supporting_units_cited(
@@ -156,7 +162,7 @@ def evaluate_traceability(
     )
     return {
         "retrieval_hit_at_k": retrieval_hit,
-        "evidence_available": retrieval_hit == 1.0,
+        "evidence_available": evidence_available,
         "answer_correct": answer_correct(
             answer_output,
             gold_answer,

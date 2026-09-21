@@ -20,7 +20,8 @@ The central design principle is:
 
 The reference implementation keeps three layers separate:
 
-1. **Evidence Availability** — did retrieval return the required knowledge unit?
+1. **Evidence Availability** — does the final evidence package contain every
+   required knowledge unit?
 2. **Answer Correctness** — does the answer agree with the task's deterministic
    label or an explicitly configured evaluator?
 3. **Provenance Integrity** — do all citation IDs resolve to the current
@@ -82,7 +83,8 @@ identity, local citation IDs, and deterministic provenance resolution.
 The package exposes a deterministic synthetic evaluator for three distinct
 layers:
 
-- **Evidence Availability** — required evidence reached the generation stage;
+- **Evidence Availability** — every required evidence unit is present in the
+  final evidence package passed to generation;
 - **Answer Correctness** — the answer exactly matches the normalized synthetic
   gold answer under `ExactMatchAnswerEvaluator`;
 - **Provenance Integrity** — every selected citation ID belongs to the current
@@ -100,12 +102,15 @@ The evaluator also reports:
 - `supporting_units_cited`
 - `end_to_end_traceability`
 
-`supporting_units_cited` is a deterministic synthetic proxy: all expected
-supporting unit IDs must be represented among resolved citations. It is not a
-semantic evidence-support judge. **Provenance integrity != semantic evidence
-support.** Semantic evidence support asks whether the cited evidence actually
-supports the answer and requires an independently audited human or LLM
-evaluator.
+`retrieval_hit_at_k` remains a retrieval-stage indicator. `evidence_available`
+is computed from the final evidence package, so the two metrics can differ.
+
+`supporting_units_cited` is a deterministic supporting-unit coverage proxy: all
+expected supporting unit IDs must be represented among resolved citations. It
+is not semantic entailment, a semantic evidence-support judge, or a factual
+correctness judge. **Provenance integrity != semantic evidence support.**
+Semantic evidence support asks whether the cited evidence actually supports the
+answer and requires an independently audited human or LLM evaluator.
 
 The reference `end_to_end_traceability` metric is defined as:
 
@@ -116,7 +121,7 @@ AND supporting_units_cited
 ```
 
 This reference metric is a deterministic synthetic proxy for end-to-end
-machine-verifiable traceability. A production deployment may replace
+traceability. A production deployment may replace
 supporting-unit coverage with an independently audited semantic support
 evaluator.
 

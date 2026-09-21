@@ -5,10 +5,10 @@ different questions and must not be collapsed into one accuracy number.
 
 ## Evidence Availability
 
-Evidence Availability asks whether the required evidence reached the generation
-stage. The reference implementation demonstrates this with
-`retrieval_hit_at_k` and the boolean `evidence_available` over a deterministic
-synthetic gold unit set.
+Evidence Availability asks whether every required evidence unit is present in
+the final `EvidencePackage` passed to generation. `retrieval_hit_at_k` remains
+a retrieval-stage indicator, while `evidence_available` is computed from the
+package contents, so the two metrics can differ.
 
 ## Answer Correctness
 
@@ -38,8 +38,9 @@ retrieval success != answer correctness != provenance integrity
 ## Supporting-unit coverage
 
 `supporting_units_cited` checks whether every expected synthetic supporting unit
-ID is represented among resolved citations. It is a deterministic coverage
-proxy for this reference corpus.
+ID is represented among resolved citations. It is a deterministic
+supporting-unit coverage proxy for this reference corpus, not semantic
+entailment, a semantic evidence-support judge, or a factual correctness judge.
 
 ## Semantic Evidence Support
 
@@ -65,7 +66,8 @@ AND supporting_units_cited
 ```
 
 This reference metric is a deterministic synthetic proxy for end-to-end
-machine-verifiable traceability. A production deployment may replace
+traceability. `answer_correct` is reported separately and is not part of this
+metric. A production deployment may replace
 supporting-unit coverage with an independently audited semantic support
 evaluator.
 

@@ -6,6 +6,7 @@ version: "0.1.0"
 authors:
   - family-names: Zhu
     given-names: Qingchuan
+repository-code: "https://github.com/Qingchuan-ZHU/evidence-traceable-rag"
 license: Apache-2.0
 keywords:
   - retrieval-augmented generation

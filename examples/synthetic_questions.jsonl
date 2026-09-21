@@ -1,0 +1,3 @@
+# SYNTHETIC DATA — NOT DERIVED FROM ANY TECHNICAL STANDARD.
+{"question_id":"q-cooling-limit","question":"What is the operating limit for a Type-A cooling loop when ambient class Z is active?","relevant_unit_ids":["synth-2-1"],"gold_answer":"A Type-A cooling loop shall operate below 72 fictional units when ambient class Z is active.","supporting_unit_ids":["synth-2-1"]}
+{"question_id":"q-valve-interval","question":"What is the inspection interval for fictional valve class M?","relevant_unit_ids":["synth-3-4"],"gold_answer":"Inspection interval for fictional valve class M is 180 days.","supporting_unit_ids":["synth-3-4"]}

@@ -1,0 +1,14 @@
+Evidence-Traceable RAG
+
+Software code:
+Apache License 2.0.
+
+Original synthetic datasets, documentation, figures, and research artifacts:
+Creative Commons Attribution 4.0 International (CC BY 4.0).
+
+Third-party dependencies:
+their respective licenses.
+
+This repository contains original synthetic examples only. It does not
+distribute proprietary engineering corpora, technical-standard text, private
+benchmarks, or internal experimental artifacts.
